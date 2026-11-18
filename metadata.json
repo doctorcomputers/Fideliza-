@@ -1,0 +1,6 @@
+{
+  "name": "Torrevieja Conecta — Comercios y Red Cruzada",
+  "description": "Plataforma municipal de comercio local, alianzas cruzadas y pasaporte digital de fidelización en Torrevieja.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
