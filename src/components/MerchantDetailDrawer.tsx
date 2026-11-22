@@ -121,6 +121,17 @@ export const MerchantDetailDrawer: React.FC<MerchantDetailDrawerProps> = ({
                 <Clock className="h-4 w-4 shrink-0 text-[#0A3663]" aria-hidden="true" />
                 <span className="tabular-nums">Horario: {merchant.schedule}</span>
               </div>
+              <div className="pt-1">
+                <a
+                  href={merchant.apymecoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 font-semibold text-[#0A3663] hover:underline"
+                >
+                  Ver ficha oficial en apymeco.info
+                  <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </div>
 

@@ -68,13 +68,13 @@ export const RedCruzadaExplorer: React.FC<RedCruzadaExplorerProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 px-6 py-4">
         <div>
           <p className="text-xs font-medium text-slate-500">
-            Visualización Interactiva de Alianzas Locales
+            Alianzas Locales entre Asociados de APYMECO
           </p>
           <h2
             id="red-cruzada-heading"
             className="mt-0.5 text-xl font-semibold tracking-tight text-slate-900"
           >
-            Red Cruzada de Comercios en Torrevieja
+            Red Cruzada de Comercios APYMECO
           </h2>
         </div>
 
@@ -121,12 +121,12 @@ export const RedCruzadaExplorer: React.FC<RedCruzadaExplorerProps> = ({
           {/* Legend Row */}
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
             <span>
-              Haz clic en cualquier nodo para inspeccionar sus beneficios cruzados.
+              Haz clic en cualquier comercio de APYMECO para inspeccionar sus alianzas cruzadas.
             </span>
             <div className="flex items-center gap-4">
               <span className="inline-flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#0A3663]" />
-                Sede seleccionada
+                Comercio seleccionado
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#E06D53]" />
@@ -142,8 +142,8 @@ export const RedCruzadaExplorer: React.FC<RedCruzadaExplorerProps> = ({
               role="img"
               aria-label={
                 viewMode === 'graph'
-                  ? 'Grafo de alianzas cruzadas entre comercios de Torrevieja'
-                  : 'Plano de distritos de Torrevieja con comercios adheridos'
+                  ? 'Grafo de alianzas cruzadas entre comercios APYMECO de Torrevieja'
+                  : 'Plano de distritos de Torrevieja con comercios APYMECO'
               }
             >
               {/* Background Geometry */}
@@ -192,20 +192,17 @@ export const RedCruzadaExplorer: React.FC<RedCruzadaExplorerProps> = ({
                     strokeOpacity="0.35"
                   />
                   {/* District Labels */}
-                  <text x="45" y="40" fontSize="2.4" fill="#64748B" fontWeight="600">
+                  <text x="43" y="38" fontSize="2.4" fill="#64748B" fontWeight="600">
                     CENTRO
                   </text>
-                  <text x="64" y="31" fontSize="2.2" fill="#64748B" fontWeight="600">
+                  <text x="63" y="29" fontSize="2.2" fill="#64748B" fontWeight="600">
                     PLAYA DEL CURA
                   </text>
                   <text x="74" y="13" fontSize="2.2" fill="#64748B" fontWeight="600">
                     LA MATA
                   </text>
-                  <text x="16" y="83" fontSize="2.2" fill="#64748B" fontWeight="600">
-                    ACEQUIÓN
-                  </text>
-                  <text x="53" y="16" fontSize="2.1" fill="#64748B" fontWeight="600">
-                    AGUAS NUEVAS
+                  <text x="14" y="83" fontSize="2.1" fill="#64748B" fontWeight="600">
+                    ACEQUIÓN Y PARQUE NACIONES
                   </text>
                   <text x="76" y="76" fontSize="2.8" fill="#0284C7" fontWeight="600" opacity="0.7">
                     Mar Mediterráneo

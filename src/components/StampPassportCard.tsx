@@ -1,5 +1,13 @@
-import React from 'react';
-import { QrCode, Anchor, TicketCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Anchor,
+  Gift,
+  QrCode,
+  RotateCcw,
+  Smartphone,
+  TicketCheck,
+  Trophy,
+} from 'lucide-react';
 import { ActiveVoucher, CitizenSegment, StampEntry } from '../types/commerce';
 
 interface StampPassportCardProps {
@@ -9,7 +17,10 @@ interface StampPassportCardProps {
   onSegmentChange: (segment: CitizenSegment) => void;
   onOpenQrModal: () => void;
   onSelectVoucherMerchant: (merchantId: string) => void;
+  onResetPassport?: () => void;
 }
+
+const IPHONE_PRIZE_IMAGE = '/src/assets/images/iphone_18_pro_prize_1795373517821.jpg';
 
 export const StampPassportCard: React.FC<StampPassportCardProps> = ({
   stamps,
@@ -18,22 +29,27 @@ export const StampPassportCard: React.FC<StampPassportCardProps> = ({
   onSegmentChange,
   onOpenQrModal,
   onSelectVoucherMerchant,
+  onResetPassport,
 }) => {
+  const [imageError, setImageError] = useState(false);
+
   const stampedCount = stamps.filter((s) => s.stamped).length;
   const totalSlots = stamps.length;
+  const isCompleted = stampedCount >= totalSlots;
+  const remaining = Math.max(0, totalSlots - stampedCount);
   const activeVouchers = vouchers.filter((v) => !v.used);
   const progressPct = Math.round((stampedCount / totalSlots) * 100);
 
   return (
     <aside
       id="pasaporte-digital"
-      aria-label="Pasaporte Digital de Sellos y Vales"
+      aria-label="Pasaporte Digital de Sellos y Sorteo iPhone 18 Pro"
       className="rounded-2xl border border-slate-900/10 bg-white p-6 shadow-civic-l2"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium text-slate-500">
-            Pasaporte Ciudadano · Red Torrevieja
+            Pasaporte Ciudadano · Fideliza Torrevieja
           </p>
           <h2 className="mt-1 text-lg font-semibold text-slate-900">
             Tarjeta de Sellos Cruzados
@@ -63,6 +79,75 @@ export const StampPassportCard: React.FC<StampPassportCardProps> = ({
         </div>
       </div>
 
+      {/* Sorteo iPhone 18 Pro Spotlight */}
+      <div
+        className={`mt-4 flex items-center gap-4 rounded-xl border p-3.5 transition-colors ${
+          isCompleted
+            ? 'border-[#F59E0B] bg-amber-50/70'
+            : 'border-[#F59E0B]/35 bg-[#FAF8FF]'
+        }`}
+      >
+        <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white">
+          {!imageError ? (
+            <img
+              src={IPHONE_PRIZE_IMAGE}
+              alt="iPhone 18 Pro del sorteo Fideliza Torrevieja"
+              referrerPolicy="no-referrer"
+              onError={() => setImageError(true)}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center bg-slate-100 text-[#0A3663]">
+              <Smartphone className="h-6 w-6" aria-hidden="true" />
+              <span className="mt-1 text-[10px] font-semibold">iPhone 18 Pro</span>
+            </div>
+          )}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-[#A13E28]">
+            {isCompleted ? (
+              <Trophy className="h-3.5 w-3.5 shrink-0 text-[#D97706]" aria-hidden="true" />
+            ) : (
+              <Gift className="h-3.5 w-3.5 shrink-0 text-[#E06D53]" aria-hidden="true" />
+            )}
+            <span>
+              {isCompleted ? '¡Participación confirmada!' : 'Gran Sorteo APYMECO'}
+            </span>
+          </div>
+
+          <p className="mt-0.5 text-sm font-semibold leading-snug text-slate-900">
+            Completa el pasaporte y entra en el sorteo de un iPhone 18 Pro
+          </p>
+
+          {isCompleted ? (
+            <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2">
+              <span className="font-mono text-xs font-semibold text-[#0A3663] tabular-nums">
+                Boleto: FTV-IP18-4928
+              </span>
+              {onResetPassport && (
+                <button
+                  type="button"
+                  onClick={onResetPassport}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#A13E28] hover:underline"
+                >
+                  <RotateCcw className="h-3 w-3" aria-hidden="true" />
+                  Reiniciar demo
+                </button>
+              )}
+            </div>
+          ) : (
+            <p className="mt-1 text-xs text-slate-600 tabular-nums">
+              Te {remaining === 1 ? 'falta' : 'faltan'}{' '}
+              <strong className="text-[#0A3663]">
+                {remaining} {remaining === 1 ? 'sello' : 'sellos'}
+              </strong>{' '}
+              para entrar en el sorteo y sumar 15,00 €.
+            </p>
+          )}
+        </div>
+      </div>
+
       {/* Progress Line */}
       <div className="mt-4 flex items-baseline justify-between">
         <div className="text-sm text-slate-700">
@@ -72,22 +157,24 @@ export const StampPassportCard: React.FC<StampPassportCardProps> = ({
           sellos acumulados
         </div>
         <span className="text-xs font-medium text-[#A13E28] tabular-nums">
-          {stampedCount >= totalSlots
-            ? 'Bono de 15,00 € desbloqueado'
-            : `Faltan ${totalSlots - stampedCount} para bono de 15,00 €`}
+          {isCompleted
+            ? 'Sorteo iPhone 18 Pro + 15,00 € activos'
+            : `Faltan ${remaining} para completar`}
         </span>
       </div>
 
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
         <div
-          className="h-full rounded-full bg-[#E06D53] transition-all duration-300"
+          className={`h-full rounded-full transition-all duration-300 ${
+            isCompleted ? 'bg-[#F59E0B]' : 'bg-[#E06D53]'
+          }`}
           style={{ width: `${progressPct}%` }}
         />
       </div>
 
       {/* 4x2 Digital Stamp Grid (36px circular nodes) */}
       <div
-        className="mt-5 grid grid-cols-4 gap-3 rounded-xl border border-slate-200/80 bg-[#FAF8FF] p-4"
+        className="mt-4 grid grid-cols-4 gap-3 rounded-xl border border-slate-200/80 bg-[#FAF8FF] p-4"
         aria-label="Cuadrícula de 8 sellos digitales"
       >
         {stamps.map((slot) => (

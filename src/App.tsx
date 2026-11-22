@@ -37,8 +37,8 @@ export default function App() {
   const [vouchers, setVouchers] = useState<ActiveVoucher[]>(INITIAL_VOUCHERS);
   const [segment, setSegment] = useState<CitizenSegment>('Residente Frecuente');
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([
-    'cafe-muelle',
-    'optica-maritima',
+    'doctor-computers',
+    'optica-chantal',
   ]);
 
   // Explorer & Directory Filtering State
@@ -161,7 +161,9 @@ export default function App() {
   };
 
   const awardStampAndCrossVouchers = (merchant: Merchant) => {
-    // Award next available stamp slot (or cycle reset notice if full)
+    const nextEmptyIndex = stamps.findIndex((s) => !s.stamped);
+    const completesPassport = nextEmptyIndex === stamps.length - 1;
+
     setStamps((prev) => {
       const nextEmpty = prev.findIndex((s) => !s.stamped);
       if (nextEmpty === -1) {
@@ -213,14 +215,26 @@ export default function App() {
           };
           return [newVoucher, ...prev];
         });
-        showToast(
-          `Sello añadido en ${merchant.name} y vale desbloqueado para ${target.name}.`
-        );
+        if (completesPassport) {
+          showToast(
+            `¡Pasaporte completado en ${merchant.name}! Ya participas en el sorteo del iPhone 18 Pro.`
+          );
+        } else {
+          showToast(
+            `Sello añadido en ${merchant.name} y vale desbloqueado para ${target.name}.`
+          );
+        }
         return;
       }
     }
 
-    showToast(`Sello registrado en ${merchant.name}.`);
+    if (completesPassport) {
+      showToast(
+        `¡Pasaporte completado en ${merchant.name}! Ya participas en el sorteo del iPhone 18 Pro.`
+      );
+    } else {
+      showToast(`Sello registrado en ${merchant.name}.`);
+    }
   };
 
   const handleRedeemVoucher = (voucherId: string) => {
@@ -273,7 +287,7 @@ export default function App() {
             href="#inicio"
             className="whitespace-nowrap shrink-0 font-display text-lg font-bold tracking-tight text-[#0A3663]"
           >
-            Torrevieja Conecta
+            Fideliza Torrevieja
           </a>
 
           {/* Zone 2: 4 concise single-line nav links */}
@@ -326,6 +340,81 @@ export default function App() {
 
       {/* Main Content */}
       <main id="inicio" className="mx-auto max-w-[1280px] space-y-12 px-4 py-8 sm:px-8 lg:px-12 lg:py-10">
+        {/* Cartel Destacado de Portada — Sorteo iPhone 18 Pro */}
+        <section
+          aria-labelledby="sorteo-cartel-heading"
+          className="overflow-hidden rounded-2xl border border-[#0A3663]/15 bg-[#0A3663] text-white shadow-civic-l2"
+        >
+          <div className="grid grid-cols-1 items-stretch lg:grid-cols-12">
+            {/* Texto principal del cartel */}
+            <div className="flex flex-col justify-between p-6 sm:p-8 lg:col-span-7 lg:p-10">
+              <div>
+                <p className="text-xs font-semibold tracking-wide text-[#F59E0B]">
+                  Campaña Oficial APYMECO · Fideliza Torrevieja
+                </p>
+                <h2
+                  id="sorteo-cartel-heading"
+                  className="mt-2 max-w-xl text-3xl font-bold leading-[1.12] tracking-tight text-white sm:text-4xl"
+                  style={{ textWrap: 'balance' }}
+                >
+                  Completa la ruta y gana un iPhone 18 Pro
+                </h2>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-sky-100 sm:text-base">
+                  Compra en los comercios asociados de APYMECO en Torrevieja, acumula los{' '}
+                  <strong className="font-semibold text-white">8 sellos</strong> de tu
+                  pasaporte cruzado y participa automáticamente en el sorteo de un{' '}
+                  <strong className="font-semibold text-[#F59E0B]">iPhone 18 Pro</strong>{' '}
+                  además de un bono directo de 15,00 €.
+                </p>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <a
+                  href="#rutas"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-[#E06D53] px-5 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:bg-[#A13E28] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0EA5E9]"
+                >
+                  Ver rutas participantes
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQrInitialMerchantId(networkSelectedId);
+                    setIsQrModalOpen(true);
+                  }}
+                  className="inline-flex min-h-12 items-center gap-2 rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0EA5E9]"
+                >
+                  <QrCode className="h-4 w-4" aria-hidden="true" />
+                  Sellar con mi QR
+                </button>
+                <span className="ml-auto font-mono text-xs font-semibold text-sky-100 tabular-nums">
+                  Tu progreso: {stamps.filter((s) => s.stamped).length}/{stamps.length} sellos
+                </span>
+              </div>
+            </div>
+
+            {/* Fotografía protagonista del iPhone 18 Pro */}
+            <div className="relative flex items-center justify-center bg-[#F4F1EA] p-4 sm:p-6 lg:col-span-5">
+              <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-slate-900/10 bg-white shadow-civic-l2">
+                <img
+                  src="/src/assets/images/iphone_18_pro_prize_1795373517821.jpg"
+                  alt="iPhone 18 Pro — Premio del sorteo Completa la ruta y gana un iPhone 18 Pro"
+                  referrerPolicy="no-referrer"
+                  className="aspect-4/3 w-full object-cover"
+                />
+                <div className="flex items-center justify-between border-t border-slate-100 bg-white px-4 py-2.5 text-xs">
+                  <span className="font-semibold text-[#0A3663]">
+                    Premio Mayor: iPhone 18 Pro
+                  </span>
+                  <span className="font-mono font-semibold text-[#A13E28] tabular-nums">
+                    8 sellos APYMECO
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Hero Split + Pasaporte Digital */}
         <section
           aria-labelledby="hero-heading"
@@ -334,7 +423,7 @@ export default function App() {
           {/* Left 7 Columns: Civic Intro + Metrics + Search/Filter Command Strip */}
           <div className="lg:col-span-7">
             <p className="text-xs font-semibold tracking-wide text-[#0A3663]">
-              Red Municipal de Comercio Local · Torrevieja
+              Red de Comercios Asociados APYMECO · Torrevieja
             </p>
             <h1
               id="hero-heading"
@@ -344,9 +433,9 @@ export default function App() {
               Explorar Comercios y Red Cruzada
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-600">
-              Descubre establecimientos adheridos por barrio, visualiza las alianzas
-              cruzadas entre comercios vecinos y acumula sellos en tu pasaporte
-              municipal con cada compra local.
+              Descubre los comercios asociados de APYMECO en Torrevieja, visualiza las
+              alianzas cruzadas entre establecimientos vecinos y acumula sellos en tu
+              pasaporte de fidelización con cada compra local.
             </p>
 
             {/* Tabular Civic Figures */}
@@ -364,9 +453,9 @@ export default function App() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500">Barrios conectados</dt>
-                <dd className="mt-1 text-2xl font-bold text-slate-900 tabular-nums">
-                  {NEIGHBORHOODS.length}
+                <dt className="text-xs text-slate-500">Premio Pasaporte</dt>
+                <dd className="mt-1 text-2xl font-bold text-[#D97706] tabular-nums">
+                  iPhone 18 Pro
                 </dd>
               </div>
             </dl>
@@ -458,6 +547,10 @@ export default function App() {
                 setDrawerMerchantId(merchantId);
                 setNetworkSelectedId(merchantId);
               }}
+              onResetPassport={() => {
+                setStamps(INITIAL_STAMPS);
+                showToast('Pasaporte reiniciado al estado inicial de demostración.');
+              }}
             />
           </div>
         </section>
@@ -477,7 +570,7 @@ export default function App() {
           <div className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
               <p className="text-xs font-medium text-slate-500">
-                Catálogo Municipal Verificado
+                Directorio de Asociados APYMECO (apymeco.info)
               </p>
               <h2
                 id="directory-heading"
@@ -675,10 +768,19 @@ export default function App() {
         <div className="mx-auto flex max-w-[1280px] flex-col justify-between gap-6 px-4 py-8 text-xs text-slate-600 sm:flex-row sm:items-center sm:px-8 lg:px-12">
           <div>
             <p className="font-display text-sm font-semibold text-[#0A3663]">
-              Torrevieja Conecta
+              Fideliza Torrevieja
             </p>
             <p className="mt-1">
-              Programa municipal de dinamización comercial y red de alianzas locales.
+              Red cruzada de comercios asociados a{' '}
+              <a
+                href="https://www.apymeco.info"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#0A3663] hover:underline"
+              >
+                APYMECO (apymeco.info)
+              </a>{' '}
+              · Calle Ramón Gallud, 145 B, Torrevieja.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-5">

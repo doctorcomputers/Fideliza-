@@ -1,16 +1,15 @@
 export type MerchantCategory =
-  | 'Gastronomía'
-  | 'Moda y Hogar'
-  | 'Salud y Óptica'
+  | 'Alimentación y Gastronomía'
+  | 'Moda, Joyería y Hogar'
+  | 'Salud, Óptica y Estética'
   | 'Náutica y Ocio'
-  | 'Mercado Central';
+  | 'Tecnología y Papelería';
 
 export type Neighborhood =
   | 'Centro'
   | 'Playa del Cura'
   | 'La Mata'
-  | 'Acequión'
-  | 'Aguas Nuevas';
+  | 'Acequión y Parque Naciones';
 
 export type CitizenSegment = 'Residente Frecuente' | 'Visitante Estacional';
 
@@ -28,6 +27,7 @@ export interface CrossAlliance {
 export interface Merchant {
   id: string;
   name: string;
+  apymecoUrl: string;
   category: MerchantCategory;
   neighborhood: Neighborhood;
   address: string;

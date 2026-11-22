@@ -110,7 +110,7 @@ export const QrTicketModal: React.FC<QrTicketModalProps> = ({
         <div className="flex items-center justify-between bg-[#0A3663] px-6 py-4 text-white">
           <div>
             <p className="text-xs font-medium text-sky-200">
-              Torrevieja Conecta · Token de Caja
+              Fideliza Torrevieja · Token de Caja APYMECO
             </p>
             <h2 id="qr-modal-title" className="text-base font-semibold">
               Tarjeta QR Ciudadana
