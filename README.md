@@ -119,5 +119,6 @@ Cada compra realizada en un comercio adherido suma sellos al pasaporte ciudadano
 
 ## Créditos y referencias
 
+- **Práctica realizada:** Pedro García — [www.doctorcomputers.es](https://www.doctorcomputers.es)
 - **Práctica académica:** [ACADEMIARTIFICIAL — Programa Intensivo de IA Generativa](https://academiartificial.com/wp-content/uploads/2026/08/Programa-Intensivo-de-IA-Generativa-general-VI.pdf)
 - **Directorio comercial de referencia:** [APYMECO Torrevieja](https://www.apymeco.info) (Calle Ramón Gallud, 145 B, 03182 Torrevieja, Alicante)
