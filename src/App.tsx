@@ -8,6 +8,7 @@ import {
   Search,
   SlidersHorizontal,
 } from 'lucide-react';
+import { ApymecoWordSearch } from './components/ApymecoWordSearch';
 import { MerchantCard } from './components/MerchantCard';
 import { MerchantDetailDrawer } from './components/MerchantDetailDrawer';
 import { QrTicketModal } from './components/QrTicketModal';
@@ -40,6 +41,7 @@ export default function App() {
     'doctor-computers',
     'optica-chantal',
   ]);
+  const [claimedWordSearchEditions, setClaimedWordSearchEditions] = useState<string[]>([]);
 
   // Explorer & Directory Filtering State
   const [searchQuery, setSearchQuery] = useState('');
@@ -237,6 +239,49 @@ export default function App() {
     }
   };
 
+  const handleClaimWordSearchReward = (editionId: string, editionTitle: string) => {
+    if (claimedWordSearchEditions.includes(editionId)) return;
+
+    const nextEmptyIndex = stamps.findIndex((s) => !s.stamped);
+    const completesPassport = nextEmptyIndex === stamps.length - 1;
+    const alreadyFull = nextEmptyIndex === -1;
+
+    setClaimedWordSearchEditions((prev) => [...prev, editionId]);
+
+    if (!alreadyFull) {
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(
+        now.getMinutes()
+      ).padStart(2, '0')}`;
+      setStamps((prev) =>
+        prev.map((slot, idx) =>
+          idx === nextEmptyIndex
+            ? {
+                ...slot,
+                stamped: true,
+                merchantName: 'Sopa APYMECO',
+                timestampLabel: `Reto · ${timeStr}`,
+              }
+            : slot
+        )
+      );
+    }
+
+    if (completesPassport) {
+      showToast(
+        `¡Pasaporte completado con ${editionTitle}! Ya participas en el sorteo del iPhone 18 Pro.`
+      );
+    } else if (alreadyFull) {
+      showToast(
+        `¡Reto ${editionTitle} completado! Tu pasaporte ya está completo para el sorteo del iPhone 18 Pro.`
+      );
+    } else {
+      showToast(
+        `+1 Sello bonus acreditado por completar ${editionTitle}.`
+      );
+    }
+  };
+
   const handleRedeemVoucher = (voucherId: string) => {
     const voucher = vouchers.find((v) => v.id === voucherId);
     setVouchers((prev) =>
@@ -290,16 +335,22 @@ export default function App() {
             Fideliza Torrevieja
           </a>
 
-          {/* Zone 2: 4 concise single-line nav links */}
+          {/* Zone 2: 5 concise single-line nav links */}
           <nav
             aria-label="Navegación principal"
-            className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600"
+            className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600"
           >
             <a
               href="#red-cruzada"
               className="whitespace-nowrap shrink-0 transition-colors hover:text-[#0A3663] hover:underline hover:underline-offset-4"
             >
               Red Cruzada
+            </a>
+            <a
+              href="#sopa-letras"
+              className="whitespace-nowrap shrink-0 transition-colors hover:text-[#0A3663] hover:underline hover:underline-offset-4"
+            >
+              Sopa APYMECO
             </a>
             <a
               href="#comercios"
@@ -549,6 +600,7 @@ export default function App() {
               }}
               onResetPassport={() => {
                 setStamps(INITIAL_STAMPS);
+                setClaimedWordSearchEditions([]);
                 showToast('Pasaporte reiniciado al estado inicial de demostración.');
               }}
             />
@@ -563,6 +615,16 @@ export default function App() {
           onSelectMerchant={(id) => setNetworkSelectedId(id)}
           onOpenMerchantDrawer={(id) => setDrawerMerchantId(id)}
           highlightedRouteMerchantIds={activeRoute?.merchantIds}
+        />
+
+        {/* Minijuego: Sopa de Letras APYMECO */}
+        <ApymecoWordSearch
+          claimedEditions={claimedWordSearchEditions}
+          onClaimBonusStamp={handleClaimWordSearchReward}
+          onOpenMerchantDetail={(merchantId) => {
+            setDrawerMerchantId(merchantId);
+            setNetworkSelectedId(merchantId);
+          }}
         />
 
         {/* Merchant Directory Grid */}
@@ -786,6 +848,9 @@ export default function App() {
           <div className="flex flex-wrap items-center gap-5">
             <a href="#red-cruzada" className="hover:text-[#0A3663]">
               Mapa de Alianzas
+            </a>
+            <a href="#sopa-letras" className="hover:text-[#0A3663]">
+              Sopa de Letras
             </a>
             <a href="#comercios" className="hover:text-[#0A3663]">
               Directorio

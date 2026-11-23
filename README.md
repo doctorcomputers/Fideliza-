@@ -27,6 +27,7 @@ Cada compra realizada en un comercio adherido suma sellos al pasaporte ciudadano
   - Cuadrícula interactiva 4×2 de sellos digitales con selector de perfil (*Residente* / *Visitante*) y lista de vales activos.
   - Modal tipo ticket perforado con **código QR dinámico en SVG**, hash de verificación, temporizador de validez de 60 segundos y simulador de lectura en TPV.
 - **Rutas temáticas de Red Cruzada**: Circuitos comerciales recomendados de 3 paradas que filtran y resaltan los establecimientos participantes en el mapa y el directorio.
+- **Minijuego «Sopa de Letras APYMECO»**: Tablero interactivo 10×10 accesible (arrastre táctil/ratón y modo en 2 clics) con 3 ediciones de comercios reales de APYMECO, dificultad seleccionable (*Clásico* o *Con diagonales*), sistema progresivo de 4 pistas, efectos sonoros opcionales y recompensa de **+1 sello bonus** directo para el pasaporte del **iPhone 18 Pro**.
 
 ---
 
@@ -102,6 +103,7 @@ Cada compra realizada en un comercio adherido suma sellos al pasaporte ciudadano
     ├── assets/
     │   └── images/
     ├── components/
+    │   ├── ApymecoWordSearch.tsx
     │   ├── MerchantCard.tsx
     │   ├── MerchantDetailDrawer.tsx
     │   ├── MerchantIllustration.tsx
@@ -111,8 +113,10 @@ Cada compra realizada en un comercio adherido suma sellos al pasaporte ciudadano
     │   └── StampPassportCard.tsx
     ├── data/
     │   └── torreviejaData.ts
-    └── types/
-        └── commerce.ts
+    ├── types/
+    │   └── commerce.ts
+    └── utils/
+        └── wordSearchGenerator.ts
 ```
 
 ---
